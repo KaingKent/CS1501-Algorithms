@@ -1,0 +1,63 @@
+Kent Kaing(kek165)
+
+All of the operations are either contained in CarTracker.java or PQ.java.
+
+CarTracker contains two PQs: one for prices(PQp) and one for mileage(PQm). The PQ is able to insert the items properly according to the 
+attributes by using a boolean price, where true is for the price PQ and false is for the mileage PQ.
+It also contains a total of three TreeMaps. One maps the VIN to its car object. 
+The other two map the make and model to its own PQ(for price or mileage).
+Each PQ contains a keys array with a set default size so that it can be indexable. The car object also has four variables dedicated to its index in the
+price PQ, mileage PQ, make model price PQ, and make model mileage PQ.
+
+I chose TreeMaps because we needed the worst case to be theta(logn). According to the Java Oracle page, 
+"This implementation provides guaranteed log(n) time cost for the containsKey, get, put and remove operations."
+~https://docs.oracle.com/javase/8/docs/api/java/util/TreeMap.html~
+
+Since I have a separate PQ for everything the CarTracker can call the PQ's minKey() method to get the min price or min mileage,
+according to the boolean price. 
+The PQ also uses a boolean mm to indicate whether the user is retrieving with a certain make and model. 
+This boolean helps with deciding when to switch the indexes around when it swims or sinks the car.
+
+For the retrieval of a certain make and model, the make and model are mapped to a PQ for the lowest price and lowest mileage.
+To map, I used the TreeMaps as stated early for their guaranteed log(n) time for the methods, containsKey, get, put, and remove.
+
+Runtimes:
+
+    retrieval for lowest price: theta(1) constant 
+                                    -the min price is in keys[1] for the price PQ (calls minKey)
+    retrieval for lowest mileage:theta(1) constant 
+                                    -the min mileage is in keys[1] for the mileage PQ (calls minKey)
+
+    retrieval for lowest price with specific make model: theta(logn)
+                                    -retrieval uses the containsKey method(theta(logn)) 
+                                    and it then uses the get method (theta(logn)) then it calls minKey which is theta(1)
+                                    -theta(logn) + theta(logn) + theta(1) = theta(logn)
+    retrieval for lowest mileage with specific make model: theta(logn)
+                                    -retrieval uses the containsKey method(theta(logn)) 
+                                    and it then uses the get method (theta(logn)) then it calls minKey which is theta(1)
+                                    -theta(logn) + theta(logn) + theta(1) = theta(logn)
+    update: theta(logn)
+                -update method in PQ calls swim and sink which are theta(logn)
+                -also calls get method (theta(logn))
+                -theta(logn) + theta(logn) + theta(logn) = theta(logn)
+    removal: theta(logn)
+                - calls method validateVIN which is constant since all VINs are the same length
+                - calls containsKey which is theta(logn)
+                - uses get and remove from treemap which are theta(logn)
+                - calls delete from PQ which is theta(logn)
+                - theta(1) + theta(logn) + theta(logn) + theta(logn) + theta(logn) = theta(logn)
+    add: theta(logn)
+                - calls put and get from treemap (theta(logn))
+                - insert for PQ is theta(logn)
+                - theta(logn) + theta(logn) + theta(logn) = theta(logn)
+
+Memory: (n^2)
+
+    PQ has an array of car objects so that is (n)
+    Since the treemap is implemented using a red-black tree, it uses (n) space ~https://en.wikipedia.org/wiki/Red%E2%80%93black_tree~
+    The two maps for the price makemodel and mileage makemode has a PQ, and 
+    in the worst case it has one PQ with all the cars in it (n^2).
+    The map for the VIN consists of all the cars so it is also (n).
+
+    This would make it so that the memory usage would be (n^2)
+        - n + n + (n * n) = n^2 

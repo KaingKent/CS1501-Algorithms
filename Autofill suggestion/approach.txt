@@ -1,0 +1,5 @@
+save memory by putting history in dict trie and added a count variable in each node and save engineering effort by not creating a new data structure since 
+the worst case scenario would be that the user history consists of all the same words as the dictionary; that means two data structures would contain the same contents
+
+trade off runtime when program is first run to put user history in dict trie and since user history words are mixed in the dict trie, i have to look at every possible suggestion and take the top 5
+i concatenated the uses with the suggestion so that the treeset would auto sort it for me

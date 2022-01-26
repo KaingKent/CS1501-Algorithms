@@ -1,0 +1,2 @@
+formal definition
+dont forget empty in nfa to dfa table
