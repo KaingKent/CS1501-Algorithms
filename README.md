@@ -2,4 +2,5 @@
 
 class goes crazy hard
 
-worked on autofill, compression, sorting, maps
+worked on autofill, compression, sorting, maps, graphs
+
